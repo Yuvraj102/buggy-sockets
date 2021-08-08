@@ -83,11 +83,17 @@
       });
 
       socket.on("message", (msg) => {
-        console.log("got message on frontend", msg);
-        let li = document.createElement("li");
-        li.classList.add("message");
-        li.textContent = msg.message;
-        ul.appendChild(li);
+        console.log("got message on frontend:", msg);
+        let node = document.createElement("LI");
+        let textnode = document.createTextNode(msg);
+        node.appendChild(textnode);
+        node.className += " message";
+        messages.scrollTop = messages.scrollHeight;
+        ul.appendChild(node);
+
+        // let li = document.createElement("li");
+        // li.classList.add("message");
+        // li.textContent = msg.message;
       });
     </script>
     <script
