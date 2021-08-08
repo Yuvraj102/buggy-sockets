@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/chat.css" />
+    <title>Chat here</title>
+  </head>
+  <body>
+    <div class="message-box">
+      <div class="messages">
+        <ul>
+          <li class="message">dummy messages</li>
+          <li class="message">one</li>
+          <li class="message">sd jsd</li>
+          <li class="message">hey</li>
+          <li class="message">one</li>
+          <li class="message">sd jsd2</li>
+          <li class="message">hey</li>
+          <li class="message">one</li>
+          <li class="message">sd jsd3</li>
+          <li class="message">hey</li>
+          <li class="message">one</li>
+          <li class="message">sd jsd4</li>
+          <li class="message">hey</li>
+          <li class="message">one</li>
+          <li class="message">sd jsd5</li>
+        </ul>
+      </div>
+      <div class="input-box">
+        <form>
+          <input
+            type="text"
+            class="form-control message-input"
+            placeholder="message goes here"
+          />
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+      let query = new URLSearchParams(window.location.search);
+      window.onload = function () {
+        if (!query.get("name") || !query.get("room")) {
+          window.location = "/";
+        }
+      };
+
+      var socket = io();
+      socket.emit("new_user", {
+        username: query.get("name"),
+        room: query.get("room"),
+      });
+
+      var messages = document.querySelector(".messages");
+      messages.scrollTop = messages.scrollHeight;
+      var form = document.querySelector("form");
+      var message = document.querySelector(".message-input");
+      var ul = document.querySelector("ul");
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        if (!message.value) {
+          console.log("empty message submitted");
+        } else {
+          socket.emit("message", {
+            message: message.value,
+            room: query.get("room"),
+          });
+          message.value = "";
+        }
+      });
+      socket.on("message", (msg) => {
+        console.log("got message on frontend", msg);
+        let li = document.createElement("li");
+        li.classList.add("message");
+        li.textContent = msg.message;
+        ul.appendChild(li);
+      });
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

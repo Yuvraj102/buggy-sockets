@@ -1,0 +1,22 @@
+.messages {
+  height: 80vh;
+  width: 100%;
+  background-color: aqua;
+  overflow: scroll;
+}
+ul {
+  list-style-type: none;
+}
+li:nth-child(odd) {
+  background: #efefef;
+}
+.input-box form {
+  display: flex;
+  padding: 10px;
+}
+.message {
+  font-weight: 500;
+  font-size: medium;
+  border-bottom: 1px solid gray;
+  padding: 15px;
+}
