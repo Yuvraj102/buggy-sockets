@@ -56,9 +56,11 @@
       };
 
       var socket = io();
-      socket.emit("new_user", {
-        username: query.get("name"),
-        room: query.get("room"),
+      socket.on("connect", () => {
+        socket.emit("new_user", {
+          username: query.get("name"),
+          room: query.get("room"),
+        });
       });
 
       var messages = document.querySelector(".messages");
@@ -79,6 +81,7 @@
           message.value = "";
         }
       });
+
       socket.on("message", (msg) => {
         console.log("got message on frontend", msg);
         let li = document.createElement("li");

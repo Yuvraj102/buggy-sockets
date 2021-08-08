@@ -26,12 +26,14 @@ app.post("/login", (req, res) => {
 io.on("connection", (socket) => {
   console.log("got a new connection: ", socket.id);
   socket.on("new_user", (msg) => {
-    console.log("message: ", msg);
+    console.log("new user connected message: ", msg);
     socket.join(msg.room);
   });
   socket.on("message", (msg) => {
-    io.to(msg.room).emit(msg.message);
+    socket.to(msg.room).emit("message", msg.message);
+    //socket.broadcast.to
     console.log("mess obj: ", msg);
+    console.log("users from room: ", io.sockets.adapter.rooms.Map);
   });
 });
 
